@@ -8,6 +8,12 @@ Tested with:
  - OpenCV 3.4.0
 
 
+ Setup:
+  - Make sure the camera module in enabled with `sudo raspo-config`
+  - Use `sudo modprobe bcm2835-v4l2` to create a device for the Camera Module at /dev/video0
+  - Make sure OpenCV 3.4.0 or later is installed (__including OpenCV contrib__)(you may need to compile from source)
+
+
 ### Virtual Environment
 It is strongly recommended to use a Python virtual environment. To create a virtual env, use the `venv` feature of python3.
 Run the command below in the root project directory. Recommended folder name for the virtual environment is `env`.
