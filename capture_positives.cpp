@@ -9,6 +9,8 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
 
+#include "face_detect.hpp"
+
 
 // Directory in which to store training images
 #define DIRECTORY "training/positive/"
@@ -36,6 +38,9 @@ int main() {
 
 	// Convert image to greyscale
 	cv::cvtColor(image, image, cv::COLOR_RGB2GRAY);
+
+	// Detect coordinates of a face, if any
+	detect_single_face(image);
 
 	// Save the image to a file
 	try {
