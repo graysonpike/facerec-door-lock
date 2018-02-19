@@ -12,7 +12,11 @@
 #define HAAR_MIN_SIZE_Y 30
 
 
-void detect_single_face(cv::Mat image) {
+/*
+	If one faces is detected, returns a rect with the region of the recognized face
+	Returns NULL if no face is detected or if more than one face is detected
+*/
+std::vector<cv::Rect> detect_faces(cv::Mat image) {
 
 	// Create a Haar Cascade Classifier configured for frontal faces
 	cv::CascadeClassifier haar_faces_classifier(HAAR_FACES_FILE);
@@ -28,6 +32,6 @@ void detect_single_face(cv::Mat image) {
 			cv::Size(HAAR_MIN_SIZE_X, HAAR_MIN_SIZE_Y)
 		);
 
-	std::cout << face_regions.size();
+	return face_regions;
 
 }

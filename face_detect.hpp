@@ -3,6 +3,6 @@
 
 #include <opencv2/core.hpp>
 
-void detect_single_face(cv::Mat image);
+std::vector<cv::Rect> detect_faces(cv::Mat image);
 
 #endif
