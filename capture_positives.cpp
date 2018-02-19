@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 
 	// Create a directory to hold positive images if it doesn't already exist
 	if (mkdir((DIRECTORY + subject_name).c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1) {
-	    std::cout << "Error creating directory '" << DIRECTORY << subject_name << "'" << std::endl;
+	    std::cout << "Error creating directory '" << DIRECTORY << subject_name << "'. Does it already exist?" << std::endl;
 	    return(1);
 	}
 
@@ -69,19 +69,25 @@ int main(int argc, char *argv[]) {
 		if(face_regions.size() != 1) {
 			std::cout << "Error: Detected " << face_regions.size() << " faces." << std::endl;
 		} else {
+
+			std::cout << "Successfuly found a face. Saving positive image... ";
+
 			// Crop image to only face
 			image = image(face_regions[0]);
 			// Save cropped image to file
 			try {
 				// Pad image number with leading zeros
-				 std::stringstream ss;
-				 ss << std::setfill('0') << std::setw(3) << image_number;
+				std::stringstream ss;
+				ss << std::setfill('0') << std::setw(3) << image_number;
 		        cv::imwrite(DIRECTORY + subject_name + "/" + FILENAME_PREFIX + ss.str() +".pgm", image);
 		    }
 		    catch (std::runtime_error& ex) {
+		    	std::cout << "[FAILED]" << std::endl;
 		        fprintf(stderr, "Exception saving image to PGM format: %s\n", ex.what());
 		        return 1;
 		    }
+		    std::cout << "[DONE]" << std::endl;
+		    image_number ++;
 		}
 
 		std::string input;
