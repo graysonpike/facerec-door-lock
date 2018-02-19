@@ -1,5 +1,6 @@
 // Command line utility to capture positive training images using the Camera Module
 // Press the space bar to take a picture, or any other key to quit.
+// Grayson Pike, 2018
 
 // Correct usage: ./capture_positives <subject_name>
 // Positive images for this subject are stored in DIRECTORY/<subject_name>

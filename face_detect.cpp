@@ -1,3 +1,5 @@
+// Grayson Pike, 2018
+
 #include "face_detect.hpp"
 
 #include <opencv2/core.hpp>
@@ -13,8 +15,8 @@
 
 
 /*
-	If one faces is detected, returns a rect with the region of the recognized face
-	Returns NULL if no face is detected or if more than one face is detected
+	Utility function to detect faces in an image
+	Returns a vector of Rects with regions of detected faces in a given image
 */
 std::vector<cv::Rect> detect_faces(cv::Mat image) {
 

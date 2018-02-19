@@ -1,3 +1,5 @@
+// Grayson Pike, 2018
+
 #ifndef FACE_DETECT_HPP
 #define FACE_DETECT_HPP
 
