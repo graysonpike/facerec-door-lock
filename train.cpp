@@ -35,12 +35,12 @@ int main() {
 	// Load negative training images
 	std::vector<cv::Mat> negative_images;
 	std::cout << "Loading negative training images for subjects ... ";
-	image_files = get_files(std::string(TRAINING_DIR) + "positive/" + directories[i]);
+	std::vector<std::string> image_files = get_files(std::string(TRAINING_DIR) + "positive");
 	for(int j = 0; j < image_files.size(); j++) {
 		negative_images.push_back(cv::imread(std::string(TRAINING_DIR) + "negative/" + image_files[j]));
 	}
 	std::cout << "[DONE]" << std::endl;
 
-	
+
 
 }
