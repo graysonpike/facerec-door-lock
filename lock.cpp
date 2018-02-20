@@ -79,8 +79,6 @@ int main(int argc, char *argv[]) {
 			image = image(face_regions[0]);
 			cv::resize(image, image, cv::Size(FACE_WIDTH, FACE_HEIGHT), 0, 0, cv::INTER_LANCZOS4);
 
-			cv::imwrite("cropped_face.pgm", image);
-
 			// Determine if face is allowed
 			int label;
 			double confidence;
