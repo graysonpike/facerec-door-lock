@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
 
 	// Train model
 	std::cout << "Training model with " << training_images.size() << " faces ..." << std::flush;
-	cv::Ptr<cv::face::FaceRecognizer> model = cv::face::EigenFaceRecognizer::create();
+	cv::Ptr<cv::face::FaceRecognizer> model = cv::face::LBPHFaceRecognizer::create();
 	model->train(training_images, labels);
 	std::cout << "[DONE]" << std::endl;
 

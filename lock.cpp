@@ -12,6 +12,7 @@
 #include <opencv2/imgcodecs.hpp>
 
 #include "face_detect.hpp"
+#include "hardware.hpp"
 
 
 #define MODEL_DIR "complete_models/"
@@ -40,7 +41,7 @@ int main(int argc, char *argv[]) {
 
 	// Load model
 	std::cout << "Loading model..." << std::flush;
-	cv::Ptr<cv::face::FaceRecognizer> model = cv::face::EigenFaceRecognizer::create();
+	cv::Ptr<cv::face::FaceRecognizer> model = cv::face::LBPHFaceRecognizer::create();
 	model->read(std::string(MODEL_DIR) + model_name + ".xml");
 	std::cout << "[DONE]" << std::endl;
 
@@ -61,6 +62,7 @@ int main(int argc, char *argv[]) {
 		cv::Mat image;
 
 		// Capture an image
+		flush_capture_buffer(capture);
 		capture >> image;
 
 		// Convert image to greyscale

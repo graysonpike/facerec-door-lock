@@ -9,8 +9,6 @@
 #include <iomanip>
 #include <sstream>
 #include <sys/stat.h>
-#include <cstdio>
-#include <ctime>
 // Note: OpenCV 3 uses headers labled as 'opencv2'. It's just the way it is.
 // https://docs.opencv.org/master/db/dfa/tutorial_transition_guide.html#gsc.tab=0
 #include <opencv2/core.hpp>
@@ -19,32 +17,13 @@
 #include <opencv2/imgproc.hpp>
 
 #include "face_detect.hpp"
+#include "hardware.hpp"
 
 
 // Directory in which to store training images
 #define DIRECTORY "training/positive/"
 // Prefix on image filenames. Image number is appended before saving
 #define FILENAME_PREFIX "positive_"
-
-
-// http://answers.opencv.org/question/29957/highguivideocapture-buffer-introducing-lag/post-id-38217/
-// Hack to clear capture buffer. Setting buffer size is not supported with Raspberry Pi Camera
-void flush_capture_buffer(cv::VideoCapture& capture) {
-
-	// Begin measuring time
-    std::clock_t start_time;
-    double duration;
-
-    int i = 0;
-    while (i < 15) {
-        start_time = std::clock();
-        capture.grab();                      
-        duration = (std::clock() - start_time) / (double)CLOCKS_PER_SEC;        
-        std::cout << "Duration: " << duration << std::endl;
-        i++;
-    }
-
-}
 
 
 int main(int argc, char *argv[]) {
@@ -64,6 +43,7 @@ int main(int argc, char *argv[]) {
 	// Open the default camera
 	// If this fails, make sure you've run
 	// sudo modprobe bcm2835-v4l2
+	// ^ PLACE THIS IN YOUR ~/.bash_profile 
 	// which creates a device for the camera at /dev/video0
 	cv::VideoCapture capture(0);
 	if(!capture.isOpened()) {
@@ -82,6 +62,7 @@ int main(int argc, char *argv[]) {
 	while(loop) {
 
 		// Capture an image
+		flush_capture_buffer(capture);
 		capture >> image;
 
 
@@ -94,7 +75,7 @@ int main(int argc, char *argv[]) {
 			std::cout << "Error: Detected " << face_regions.size() << " faces." << std::endl;
 		} else {
 
-			std::cout << "Successfuly found a face. Saving positive image... ";
+			std::cout << "Successfuly found a face. Saving positive image... " << std::flush;
 
 			// Crop image to only face
 			image = image(face_regions[0]);
@@ -120,7 +101,6 @@ int main(int argc, char *argv[]) {
 		if(input == "q" || input == "Q") {
 			loop = false;
 		}
-		flush_capture_buffer(capture);
 	}
 
 }
