@@ -1,5 +1,6 @@
 # Project specific items
 training/*
+complete_models/*
 
 
 # Byte-compiled / optimized / DLL files

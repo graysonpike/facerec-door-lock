@@ -9,6 +9,8 @@
 #include <iomanip>
 #include <sstream>
 #include <sys/stat.h>
+#include <cstdio>
+#include <ctime>
 // Note: OpenCV 3 uses headers labled as 'opencv2'. It's just the way it is.
 // https://docs.opencv.org/master/db/dfa/tutorial_transition_guide.html#gsc.tab=0
 #include <opencv2/core.hpp>
@@ -23,6 +25,26 @@
 #define DIRECTORY "training/positive/"
 // Prefix on image filenames. Image number is appended before saving
 #define FILENAME_PREFIX "positive_"
+
+
+// http://answers.opencv.org/question/29957/highguivideocapture-buffer-introducing-lag/post-id-38217/
+// Hack to clear capture buffer. Setting buffer size is not supported with Raspberry Pi Camera
+void flush_capture_buffer(cv::VideoCapture& capture) {
+
+	// Begin measuring time
+    std::clock_t start_time;
+    double duration;
+
+    int i = 0;
+    while (i < 15) {
+        start_time = std::clock();
+        capture.grab();                      
+        duration = (std::clock() - start_time) / (double)CLOCKS_PER_SEC;        
+        std::cout << "Duration: " << duration << std::endl;
+        i++;
+    }
+
+}
 
 
 int main(int argc, char *argv[]) {
@@ -62,6 +84,7 @@ int main(int argc, char *argv[]) {
 		// Capture an image
 		capture >> image;
 
+
 		// Convert image to greyscale
 		cv::cvtColor(image, image, cv::COLOR_RGB2GRAY);
 
@@ -97,6 +120,7 @@ int main(int argc, char *argv[]) {
 		if(input == "q" || input == "Q") {
 			loop = false;
 		}
+		flush_capture_buffer(capture);
 	}
 
 }
