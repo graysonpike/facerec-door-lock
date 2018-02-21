@@ -1,5 +1,6 @@
-// Program to train OpenCV facial recognition model with positive and negative training images
 // Grayson Pike, 2018
+
+// Program to train OpenCV facial recognition model with positive and negative training images
 
 #include <iostream>
 #include <vector>

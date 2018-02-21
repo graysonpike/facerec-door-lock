@@ -1,3 +1,5 @@
+// Grayson Pike, 2018
+
 // This program should output the version of OpenCV if it's installed correctly.
 
 #include <iostream>

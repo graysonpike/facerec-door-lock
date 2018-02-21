@@ -1,5 +1,6 @@
-// Facial Recognition Lock Software
 // Grayson Pike, 2018
+
+// Facial Recognition Lock Software (Main program)
 
 
 #include <iostream>

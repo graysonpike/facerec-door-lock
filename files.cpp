@@ -57,3 +57,18 @@ std::vector<std::string> get_files(std::string path) {
     return result;
 
 }
+
+/*
+    Create a directory if it doesn't already exist
+    Doesn't create intermediate directories, nested directories will need to be created one at a time
+    Returns true on success, false otherwise.
+*/
+bool create_directory(std::string path) {
+
+    if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1) {
+        std::cout << "Error creating directory '" << DIRECTORY << subject_name << "'. Does it already exist?" << std::endl;
+        return false;
+    }
+    return true;
+
+}

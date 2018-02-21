@@ -9,5 +9,6 @@
 
 std::vector<std::string> get_directories(std::string path);
 std::vector<std::string> get_files(std::string path);
+bool create_directory(std::string path);
 
 #endif

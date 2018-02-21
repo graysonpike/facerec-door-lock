@@ -1,6 +1,7 @@
+// Grayson Pike, 2018
+
 // Command line utility to capture positive training images using the Camera Module
 // Press the space bar to take a picture, or any other key to quit.
-// Grayson Pike, 2018
 
 // Correct usage: ./capture_positives <subject_name>
 // Positive images for this subject are stored in DIRECTORY/<subject_name>
@@ -52,10 +53,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Create a directory to hold positive images if it doesn't already exist
-	if (mkdir((DIRECTORY + subject_name).c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1) {
-	    std::cout << "Error creating directory '" << DIRECTORY << subject_name << "'. Does it already exist?" << std::endl;
-	    return(1);
-	}
+	create_directory(DIRECTORY + subject_name);
 
 	bool loop = true;
 	int image_number = 1;
