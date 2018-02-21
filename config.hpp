@@ -1,7 +1,9 @@
 // Grayson Pike, 2018
 
-// Directory in which to store training images
-#define TRAINING_IMAGES_DIR "training/positive/"
+// For training images
+#define TRAINING_DIR "training/"
+// For XML files representing the saved states of trained models
+#define MODEL_DIR "complete_models/"
 // Prefix on image filenames. Image number is appended before saving
 #define TRAINING_FILENAME_PREFIX "positive_"
 
@@ -24,8 +26,7 @@
 
 // Size (in pixels) to resize images for training and prediction
 // Don't change this unless you also change the size of the training images
-#define FACE_WIDTH  92
-#define FACE_HEIGHT 112
-
-#define TRAINING_DIR "training/"
-#define MODEL_DIR "complete_models/"
+// #define FACE_WIDTH  92
+// #define FACE_HEIGHT 112
+#define FACE_WIDTH  200
+#define FACE_HEIGHT 200

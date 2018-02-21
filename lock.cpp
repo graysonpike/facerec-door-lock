@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
 	model->read(std::string(MODEL_DIR) + model_name + ".xml");
 	std::cout << "[DONE]" << std::endl;
 
-	std::VideoCapture camera = get_camera();
+	cv::VideoCapture camera = get_camera();
 
 	// Loop to detect faces
 	bool loop = true;

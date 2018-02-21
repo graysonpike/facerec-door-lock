@@ -48,8 +48,11 @@ int main(int argc, char *argv[]) {
 
     cv::VideoCapture camera = get_camera();
 
+    // Create the positive images directory if it doesn't already exist
+    create_directory(std::string(TRAINING_DIR) + "positive/", true);
+
     // Create a directory to hold positive images if it doesn't already exist
-    if (!create_directory(TRAINING_IMAGES_DIR + subject_name)) {
+    if (!create_directory(std::string(TRAINING_DIR) + "positive/" + subject_name)) {
         // Failed to create directory, exit
         exit(1);
     }
@@ -85,7 +88,7 @@ int main(int argc, char *argv[]) {
             // Pad image number with leading zeros (for the filename)
             std::stringstream ss;
             ss << std::setfill('0') << std::setw(3) << image_number;
-            if(!save_pgm_image(image, TRAINING_IMAGES_DIR + subject_name + "/" + TRAINING_FILENAME_PREFIX + ss.str() + ".pgm")) {
+            if(!save_pgm_image(image, std::string(TRAINING_DIR) + "positive/" + subject_name + "/" + TRAINING_FILENAME_PREFIX + ss.str() + ".pgm")) {
                 exit(1);
             }
 

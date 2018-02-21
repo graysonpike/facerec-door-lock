@@ -18,6 +18,7 @@
 
 #include "files.hpp"
 #include "config.hpp"
+#include "face_detect.hpp"
 
 
 /*
@@ -60,14 +61,21 @@ int main(int argc, char *argv[]) {
     }
 
     // Load negative training images
-    std::cout << "Loading negative training images for subjects ... ";
-    directories = get_directories(std::string(TRAINING_DIR) + "negative/");
-    for (int i = 0; i < directories.size(); i++) {
-        std::vector<std::string> image_files = get_files(std::string(TRAINING_DIR) + "negative/" + directories[i]);
-        for (int j = 0; j < image_files.size(); j++) {
-            training_images.push_back(cv::imread(std::string(TRAINING_DIR) + "negative/" + directories[i] + "/" + image_files[j], cv::IMREAD_GRAYSCALE));
+    std::cout << "Loading negative training images for subjects ... " << std::flush;
+    std::vector<std::string> image_files = get_files(std::string(TRAINING_DIR) + "negative/georgia_tech");
+    std::cout << "test" << std::endl;
+    for (int i = 0; i < image_files.size(); i++) {
+        std::cout << "Attempting to load '" << std::string(TRAINING_DIR) + "negative/georgia_tech/" + image_files[i] << "'" << std::endl;
+        cv::Mat temp_image = cv::imread(std::string(TRAINING_DIR) + "negative/georgia_tech/" + image_files[i], cv::IMREAD_GRAYSCALE);
+        std::vector<cv::Rect> face_regions = detect_faces(temp_image);
+        if (face_regions.size() == 1) {
+            training_images.push_back(temp_image(face_regions[0]));
             labels.push_back(0);
+            std::cout << "working" << std::endl;
+        } else {
+            std::cout << "failed" << std::endl;
         }
+       
     }
     std::cout << "[DONE]" << std::endl;
 

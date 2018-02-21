@@ -12,7 +12,7 @@
 
 std::vector<std::string> get_directories(std::string path);
 std::vector<std::string> get_files(std::string path);
-bool create_directory(std::string path);
+bool create_directory(std::string path, bool silent = false);
 bool save_pgm_image(cv::Mat image, std::string filepath);
 
 #endif
