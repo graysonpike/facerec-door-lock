@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <dirent.h>
-#include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
 
@@ -68,9 +67,26 @@ std::vector<std::string> get_files(std::string path) {
 bool create_directory(std::string path) {
 
     if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1) {
-        std::cout << "Error creating directory '" << path << "'. Does it already exist?" << std::endl;
+        std::cerr << "Error creating directory '" << path << "'. Does it already exist?" << std::endl;
         return false;
     }
     return true;
 
+}
+
+
+/*
+    Save an image in PGM format with a given path/filename
+    Returns true on success, false otherwise
+*/
+bool save_pgm_image(cv::Mat image, std::string filepath) {
+    // Save cropped image to file
+    try {    
+        cv::imwrite(filepath, image);
+    }
+    catch (std::runtime_error& ex) {
+        std::cerr << "Exception saving image to PGM format: " << ex.what() << std::endl;
+        return false;
+    }
+    return true;
 }

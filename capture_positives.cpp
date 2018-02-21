@@ -26,33 +26,32 @@
 #include "config.hpp"
 
 
+/*
+    Returns subject name from command line arguments or exits on failure  
+*/
+std::string get_subject_name(int argc, char *argv[]) {
+
+    std::string model_name;
+    if (argc != 2) {
+        std::cout << "Error: Correct usage: ./capture_positives <subject_name>" << std::endl;
+        exit(1);
+    } else {
+        return argv[1];
+    }
+
+}
+
+
 int main(int argc, char *argv[]) {
 
-    // Accept command line argument for subject name
-    std::string subject_name;
-    if (argc != 2) {
-        std::cout << "Error: Correct usage: ./capture_positives <subject_name>"
-                  << std::endl;
-        return 1;
-    } else {
-        subject_name = argv[1];
-    }
+    std::string subject_name = get_subject_name(argc, argv);
 
-    // Open the default camera
-    // If this fails, make sure you've run
-    // sudo modprobe bcm2835-v4l2
-    // ^ PLACE THIS IN YOUR ~/.bash_profile
-    // which creates a device for the camera at /dev/video0
-    cv::VideoCapture capture(0);
-    if (!capture.isOpened()) {
-        std::cout << "Failed to open the camera." << std::endl;
-        return 1;
-    }
+    cv::VideoCapture camera = get_camera();
 
     // Create a directory to hold positive images if it doesn't already exist
-    if (!create_directory(DIRECTORY + subject_name)) {
+    if (!create_directory(TRAINING_IMAGES_DIR + subject_name)) {
         // Failed to create directory, exit
-        return 1;
+        exit(1);
     }
 
     cv::Mat image;
@@ -62,8 +61,8 @@ int main(int argc, char *argv[]) {
     while (loop) {
         
         // Capture an image
-        flush_capture_buffer(capture);
-        capture >> image;
+        flush_capture_buffer(camera);
+        camera >> image;
 
         // Convert image to grayscale
         cv::cvtColor(image, image, cv::COLOR_RGB2GRAY);
@@ -74,28 +73,20 @@ int main(int argc, char *argv[]) {
         // If only one face was found, perform recognition on it
         if (face_regions.size() != 1) {
 
-            std::cout << "Error: Detected " << face_regions.size() << " faces."
-                      << std::endl;
+            std::cout << "Error: Detected " << face_regions.size() << " faces." << std::endl;
 
         } else {
 
-            std::cout << "Successfuly found a face. Saving positive image... "
-                      << std::flush;
+            std::cout << "Successfuly found a face. Saving positive image... " << std::flush;
 
             // Crop image to only face
             image = image(face_regions[0]);
 
-            // Save cropped image to file
-            try {
-                // Pad image number with leading zeros (for the filename)
-                std::stringstream ss;
-                ss << std::setfill('0') << std::setw(3) << image_number;
-                cv::imwrite(DIRECTORY + subject_name + "/" + FILENAME_PREFIX + ss.str() + ".pgm", image);
-            }
-            catch (std::runtime_error& ex) {
-                std::cout << "[FAILED]" << std::endl;
-                fprintf(stderr, "Exception saving image to PGM format: %s\n", ex.what());
-                return 1;
+            // Pad image number with leading zeros (for the filename)
+            std::stringstream ss;
+            ss << std::setfill('0') << std::setw(3) << image_number;
+            if(!save_pgm_image(image, TRAINING_IMAGES_DIR + subject_name + "/" + TRAINING_FILENAME_PREFIX + ss.str() + ".pgm")) {
+                exit(1);
             }
 
             std::cout << "[DONE]" << std::endl;

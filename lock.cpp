@@ -1,6 +1,12 @@
 // Grayson Pike, 2018
 
-// Facial Recognition Lock Software (Main program)
+/*
+	Facial Recognition Lock Software (Main program)
+	Runs continuously looking for specific faces, then triggers a servo
+	when an authenticated face is recognized.
+
+	To prepare a model for this program, follow the steps in README.md
+*/
 
 
 #include <iostream>
@@ -17,16 +23,25 @@
 #include "config.hpp"
 
 
+/*
+    Returns model name from command line arguments or exits on failure  
+*/
+std::string get_model_name(int argc, char *argv[]) {
+
+    std::string model_name;
+    if (argc != 2) {
+        std::cout << "Error: Correct usage: ./train <model_name>" << std::endl;
+        exit(1);
+    } else {
+        return argv[1];
+    }
+
+}
+
+
 int main(int argc, char *argv[]) {
 
-	// Accpet command line argument for model name
-	std::string model_name;
-	if (argc != 2) {
-		std::cout << "Error: Correct usage: ./lock <model_name>" << std::endl;
-		return 1;
-	} else {
-		model_name = argv[1];
-	}
+	std::string model_name = get_model_name(argc, argv);
 
 	// Load model
 	std::cout << "Loading model..." << std::flush;
@@ -34,15 +49,7 @@ int main(int argc, char *argv[]) {
 	model->read(std::string(MODEL_DIR) + model_name + ".xml");
 	std::cout << "[DONE]" << std::endl;
 
-	// Open the default camera
-	// If this fails, make sure you've run
-	// sudo modprobe bcm2835-v4l2
-	// which creates a device for the camera at /dev/video0
-	cv::VideoCapture capture(0);
-	if (!capture.isOpened()) {
-		std::cout << "Failed to open the camera." << std::endl;
-		return 1;
-	}
+	std::VideoCapture camera = get_camera();
 
 	// Loop to detect faces
 	bool loop = true;
@@ -51,8 +58,8 @@ int main(int argc, char *argv[]) {
 		cv::Mat image;
 
 		// Capture an image
-		flush_capture_buffer(capture);
-		capture >> image;
+		flush_capture_buffer(camera);
+		camera >> image;
 
 		// Convert image to greyscale
 		cv::cvtColor(image, image, cv::COLOR_RGB2GRAY);

@@ -1,9 +1,9 @@
 // Grayson Pike, 2018
 
 // Directory in which to store training images
-#define DIRECTORY "training/positive/"
+#define TRAINING_IMAGES_DIR "training/positive/"
 // Prefix on image filenames. Image number is appended before saving
-#define FILENAME_PREFIX "positive_"
+#define TRAINING_FILENAME_PREFIX "positive_"
 
 // Constants for Haar Cascade face detection
 #define HAAR_FACES_FILE "cascades/haarcascade_frontalface_alt.xml"
@@ -26,3 +26,6 @@
 // Don't change this unless you also change the size of the training images
 #define FACE_WIDTH  92
 #define FACE_HEIGHT 112
+
+#define TRAINING_DIR "training/"
+#define MODEL_DIR "complete_models/"
