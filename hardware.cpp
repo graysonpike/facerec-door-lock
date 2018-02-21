@@ -18,7 +18,7 @@ void flush_capture_buffer(cv::VideoCapture& capture) {
 	double duration;
 
 	// Frame buffer holds five frames, grab and dispose of them all
-	for(int i = 0; i < 5; i++) {
+	for(int i = 0; i < 10; i++) {
 		start_time = std::clock();
 		capture.grab();
 		duration = (std::clock() - start_time) / (double)CLOCKS_PER_SEC;
