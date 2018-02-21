@@ -1,5 +1,5 @@
 # Project specific items
-training/*
+training/positive/*
 complete_models/*
 
 
