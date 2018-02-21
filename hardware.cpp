@@ -13,16 +13,16 @@
 void flush_capture_buffer(cv::VideoCapture& capture) {
 
 	// Begin measuring time
-    std::clock_t start_time;
-    double duration;
+	std::clock_t start_time;
+	double duration;
 
-    int i = 0;
-    while (i < 5) {
-        start_time = std::clock();
-        capture.grab();                      
-        duration = (std::clock() - start_time) / (double)CLOCKS_PER_SEC;        
-        std::cout << "Duration: " << duration << std::endl;
-        i++;
-    }
+	int i = 0;
+	while (i < 5) {
+		start_time = std::clock();
+		capture.grab();
+		duration = (std::clock() - start_time) / (double)CLOCKS_PER_SEC;
+		std::cout << "Duration: " << duration << std::endl;
+		i++;
+	}
 
 }

@@ -14,26 +14,14 @@
 
 #include "face_detect.hpp"
 #include "hardware.hpp"
-
-
-#define MODEL_DIR "complete_models/"
-// Threshold for the confidence of a recognized face before it's considered a
-// positive match.
-// Lower confidence -> closer match to allowed face
-// Lower value for stricter recognition, raise value for more strict recognition
-#define POSITIVE_THRESHOLD 2000.0
-
-// Size (in pixels) to resize images for training and prediction
-// Don't change this unless you also change the size of the training images
-#define FACE_WIDTH  92
-#define FACE_HEIGHT 112
+#include "config.hpp"
 
 
 int main(int argc, char *argv[]) {
 
 	// Accpet command line argument for model name
 	std::string model_name;
-	if(argc != 2) {
+	if (argc != 2) {
 		std::cout << "Error: Correct usage: ./lock <model_name>" << std::endl;
 		return 1;
 	} else {
@@ -51,14 +39,14 @@ int main(int argc, char *argv[]) {
 	// sudo modprobe bcm2835-v4l2
 	// which creates a device for the camera at /dev/video0
 	cv::VideoCapture capture(0);
-	if(!capture.isOpened()) {
+	if (!capture.isOpened()) {
 		std::cout << "Failed to open the camera." << std::endl;
 		return 1;
 	}
 
 	// Loop to detect faces
 	bool loop = true;
-	while(loop) {
+	while (loop) {
 
 		cv::Mat image;
 
@@ -72,9 +60,9 @@ int main(int argc, char *argv[]) {
 		// Detect coordinates of a face, if any
 		std::vector<cv::Rect> face_regions = detect_faces(image);
 		std::cout << "Deteced " << face_regions.size() << " faces." << std::endl;
-		
+
 		// TODO: Make this work with more than one face in the picture
-		if(face_regions.size() == 1) {
+		if (face_regions.size() == 1) {
 
 			// Crop image to face, then resize
 			image = image(face_regions[0]);
@@ -87,7 +75,7 @@ int main(int argc, char *argv[]) {
 
 			std::cout << "Results: " << label << ", " << confidence << std::endl;
 
-			if(label != 0 && confidence <= POSITIVE_THRESHOLD) {
+			if (label != 0 && confidence <= POSITIVE_THRESHOLD) {
 				std::cout << "******   Detected allowed face with label: " << label << std::endl;
 			}
 
@@ -96,7 +84,7 @@ int main(int argc, char *argv[]) {
 		std::string input;
 		std::cout << "Enter 'q' to quit, or any other key to take another picture: " << std::endl;
 		std::cin >> input;
-		if(input == "q" || input == "Q") {
+		if (input == "q" || input == "Q") {
 			loop = false;
 		}
 

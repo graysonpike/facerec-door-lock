@@ -6,6 +6,8 @@
 #include <opencv2/objdetect.hpp>
 #include <iostream>
 
+#include "config.hpp"
+
 
 /*
 	Utility function to detect faces in an image
@@ -19,13 +21,13 @@ std::vector<cv::Rect> detect_faces(cv::Mat image) {
 	// Identify all the regions with faces in the image
 	std::vector<cv::Rect> face_regions;
 	haar_faces_classifier.detectMultiScale(
-			image,
-			face_regions,
-			HAAR_SCALE_FACTOR,
-			HAAR_MIN_NEIGHBORS,
-			cv::CASCADE_SCALE_IMAGE,
-			cv::Size(HAAR_MIN_SIZE_X, HAAR_MIN_SIZE_Y)
-		);
+	    image,
+	    face_regions,
+	    HAAR_SCALE_FACTOR,
+	    HAAR_MIN_NEIGHBORS,
+	    cv::CASCADE_SCALE_IMAGE,
+	    cv::Size(HAAR_MIN_SIZE_X, HAAR_MIN_SIZE_Y)
+	);
 
 	return face_regions;
 
