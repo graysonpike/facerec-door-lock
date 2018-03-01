@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cstdio>
 #include <ctime>
+#include <fstream>
+#include <string.h>
 
 /*
 	http://answers.opencv.org/question/29957/highguivideocapture-buffer-introducing-lag/post-id-38217/
@@ -47,4 +49,127 @@ cv::VideoCapture get_camera() {
     }
 
     return camera;
+}
+
+
+/*
+	Create a GPIO object to control a GPIO pin
+	Pin is automatically exported on creation, and unexported on deletion
+*/
+GPIO::GPIO(std::string pin, std::string dir) {
+
+	this->pin = pin;
+	this->export_pin();
+	this->set_dir(dir);
+
+}
+
+
+
+/*
+	When deleting a GPIO object, we unexport the pin
+*/
+GPIO::~GPIO() {
+
+	this->unexport_pin();
+
+}
+
+
+/*
+	Export the pin with /sys/class/gpio/export
+	This must be done before using the pin
+*/
+void GPIO::export_pin() {
+
+	std::ofstream exportgpio("/sys/class/gpio/export");
+	if(exportgpio < 0) {
+		std::cerr << "Error: Failed to export GPIO" << this->pin << "." << std::endl;
+		exit(-1);
+	}
+
+	// Write pin to output
+	exportgpio << this->pin;
+
+	exportgpio.close();
+
+}
+
+
+/*
+	Unexport the pin with /sys/class/gpio/unexport
+*/
+void GPIO::unexport_pin() {
+
+	std::ofstream unexportgpio("/sys/class/gpio/unexport");
+	if(unexportgpio < 0) {
+		std::cerr << "Error: Failed to unexport GPIO" << this->pin << "." << std::endl;
+		exit(-1);
+	}
+
+	// Write pin to output
+	unexportgpio << this->pin;
+
+	unexportgpio.close();
+
+}
+
+
+/*
+	Set the direction of the pin (in or out)
+*/
+void GPIO::set_dir(std::string dir) {
+
+	std::string set_path ="/sys/class/gpio/gpio" + this->pin + "/direction";
+	std::ofstream setgpiodir(set_path.c_str());
+	if(setgpiodir < 0) {
+		std::cerr << "Error: Failed to set GPIO" << this->pin << " direction." << std::endl;
+		exit(-1);
+	}
+
+	setgpiodir << dir;
+
+	setgpiodir.close();
+
+}
+
+
+/*
+	Set the value of the pin (1 or 0)
+*/
+void GPIO::set_value(std::string value) {
+
+	std::string set_value ="/sys/class/gpio/gpio" + this->pin + "/value";
+	std::ofstream setgpiovalue(set_path.c_str());
+	if(setgpiodir < 0) {
+		std::cerr << "Error: Failed to set GPIO" << this->pin << " value." << std::endl;
+		exit(-1);
+	}
+
+	setgpiovalue << value;
+
+	setgpiovalue.close();
+
+}
+
+
+/*
+	Read the value from the pin (0 for no voltage and 1 for 3.3v)
+*/
+int GPIO::read_value() {
+
+	std::string get_value ="/sys/class/gpio/gpio" + this->pin + "/value";
+	std::ofstream getgpiovalue(set_path.c_str());
+	if(getgpiovalue < 0) {
+		std::cerr << "Error: Failed to get GPIO" << this->pin << " value." << std::endl;
+		exit(-1);
+	}
+
+	string &value;
+	getgpiovalue >> value;
+
+	getgpiovalue.close();
+
+	return strcmp(value, "0") ? 0 : 1;
+
 }
