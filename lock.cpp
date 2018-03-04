@@ -42,6 +42,9 @@ std::string get_model_name(int argc, char *argv[]) {
 
 int main(int argc, char *argv[]) {
 
+	GPIO input_pin("17", "in");
+	std::cout << input_pin.read_value() << std::endl;
+
 	std::string model_name = get_model_name(argc, argv);
 
 	// Load model

@@ -83,15 +83,16 @@ GPIO::~GPIO() {
 void GPIO::export_pin() {
 
 	std::ofstream exportgpio("/sys/class/gpio/export");
-	if(exportgpio < 0) {
-		std::cerr << "Error: Failed to export GPIO" << this->pin << "." << std::endl;
-		exit(-1);
-	}
 
 	// Write pin to output
 	exportgpio << this->pin;
 
 	exportgpio.close();
+
+	if(!exportgpio) {
+		std::cerr << "Error: Failed to export GPIO" << this->pin << "." << std::endl;
+		exit(-1);
+	}
 
 }
 
@@ -102,15 +103,16 @@ void GPIO::export_pin() {
 void GPIO::unexport_pin() {
 
 	std::ofstream unexportgpio("/sys/class/gpio/unexport");
-	if(unexportgpio < 0) {
-		std::cerr << "Error: Failed to unexport GPIO" << this->pin << "." << std::endl;
-		exit(-1);
-	}
 
 	// Write pin to output
 	unexportgpio << this->pin;
 
 	unexportgpio.close();
+
+	if(!unexportgpio) {
+		std::cerr << "Error: Failed to unexport GPIO" << this->pin << "." << std::endl;
+		exit(-1);
+	}
 
 }
 
@@ -121,15 +123,18 @@ void GPIO::unexport_pin() {
 void GPIO::set_dir(std::string dir) {
 
 	std::string set_path ="/sys/class/gpio/gpio" + this->pin + "/direction";
+	std::cerr << "Setting direction at " << set_path << " to " << dir << std::endl;
 	std::ofstream setgpiodir(set_path.c_str());
-	if(setgpiodir < 0) {
-		std::cerr << "Error: Failed to set GPIO" << this->pin << " direction." << std::endl;
-		exit(-1);
-	}
 
 	setgpiodir << dir;
 
 	setgpiodir.close();
+
+	if(!setgpiodir) {
+		// Issue: This throws a false error even on success
+		//std::cerr << "Error: Failed to set GPIO" << this->pin << " direction." << std::endl;
+		//exit(-1);
+	}
 
 }
 
@@ -140,15 +145,16 @@ void GPIO::set_dir(std::string dir) {
 void GPIO::set_value(std::string value) {
 
 	std::string set_value ="/sys/class/gpio/gpio" + this->pin + "/value";
-	std::ofstream setgpiovalue(set_path.c_str());
-	if(setgpiodir < 0) {
-		std::cerr << "Error: Failed to set GPIO" << this->pin << " value." << std::endl;
-		exit(-1);
-	}
+	std::ofstream setgpiovalue(set_value.c_str());
 
 	setgpiovalue << value;
 
 	setgpiovalue.close();
+
+	if(!setgpiovalue) {
+		std::cerr << "Error: Failed to set GPIO" << this->pin << " value." << std::endl;
+		exit(-1);
+	}
 
 }
 
@@ -159,17 +165,18 @@ void GPIO::set_value(std::string value) {
 int GPIO::read_value() {
 
 	std::string get_value ="/sys/class/gpio/gpio" + this->pin + "/value";
-	std::ofstream getgpiovalue(set_path.c_str());
-	if(getgpiovalue < 0) {
-		std::cerr << "Error: Failed to get GPIO" << this->pin << " value." << std::endl;
-		exit(-1);
-	}
+	std::ifstream getgpiovalue(get_value.c_str());
 
-	string &value;
+	std::string value;
 	getgpiovalue >> value;
 
 	getgpiovalue.close();
 
-	return strcmp(value, "0") ? 0 : 1;
+	if(!getgpiovalue) {
+		std::cerr << "Error: Failed to get GPIO" << this->pin << " value." << std::endl;
+		exit(-1);
+	}
+
+	return value == "0" ? 0 : 1;
 
 }
