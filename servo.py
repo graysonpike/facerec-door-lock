@@ -33,7 +33,8 @@ def init(pin):
 
 
 '''
-	Outputs a given pin on 
+	Outputs a pulse with a given width (in milliseconds) to PWM pin 18
+	Correct usage: sudo python servo.py <pulse_time>
 '''
 def main():
 
@@ -56,5 +57,7 @@ def main():
 
 	# Output the given value to the servo
 	wiringpi.pwmWrite(18, int(sys.argv[1]))
+
+	print("Successfully wrote " + sys.argv[1] + " to pin 18")
 
 main()

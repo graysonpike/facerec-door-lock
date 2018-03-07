@@ -22,7 +22,10 @@
 // Threshold for a recognized face before it's considered a positive match.
 // Lower value -> closer match to allowed face
 // Lower value for stricter recognition, raise value for more strict recognition
-#define POSITIVE_THRESHOLD 80.0
+#define POSITIVE_THRESHOLD 45.0
+
+// Time for the lock to wait before relocking the door (in seconds)
+#define WAIT_TIME 2u
 
 // Size (in pixels) to resize images for training and prediction
 // Don't change this unless you also change the size of the training images

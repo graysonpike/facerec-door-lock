@@ -12,6 +12,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <stdlib.h>
+#include <unistd.h>
 
 #include <opencv2/core.hpp>
 #include <opencv2/videoio.hpp>
@@ -42,8 +44,8 @@ std::string get_model_name(int argc, char *argv[]) {
 
 int main(int argc, char *argv[]) {
 
-	GPIO input_pin("17", "in");
-	std::cout << input_pin.read_value() << std::endl;
+	//GPIO input_pin("17", "in");
+	//std::cout << input_pin.read_value() << std::endl;
 
 	std::string model_name = get_model_name(argc, argv);
 
@@ -86,18 +88,33 @@ int main(int argc, char *argv[]) {
 
 			std::cout << "Results: " << label << ", " << confidence << std::endl;
 
+			// If a face is recognized and authorized
 			if (label != 0 && confidence <= POSITIVE_THRESHOLD) {
 				std::cout << "******   Detected allowed face with label: " << label << std::endl;
+				// Move the lock to the unlocked position
+				system("sudo python servo.py 250");
+				// Sleep for 1 second (or 1000000 microseconds) to allow the servo to move
+				usleep(1500000u);
+				// Move back to the resting position
+				system("sudo python servo.py 175");
+				// Sleep for WAIT_TIME seconds before relocking the door
+				usleep(1500000u * WAIT_TIME);
+				// Move the lock to the locked position
+				system("sudo python servo.py 100");
+				// Sleep for 1 second (or 1000000 microseconds) to allow the servo to move
+				usleep(1000000u);
+				// Move back to the resting position
+				system("sudo python servo.py 175");
 			}
 
 		}
 
-		std::string input;
-		std::cout << "Enter 'q' to quit, or any other key to take another picture: " << std::endl;
-		std::cin >> input;
-		if (input == "q" || input == "Q") {
-			loop = false;
-		}
+		//std::string input;
+		//std::cout << "Enter 'q' to quit, or any other key to take another picture: " << std::endl;
+		//std::cin >> input;
+		//if (input == "q" || input == "Q") {
+		//	loop = false;
+		//}
 
 	}
 

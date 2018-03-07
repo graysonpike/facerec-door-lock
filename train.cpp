@@ -65,6 +65,7 @@ int main(int argc, char *argv[]) {
     std::vector<std::string> image_files = get_files(std::string(TRAINING_DIR) + "negative/georgia_tech");
     int total_neg = 0;
     for (int i = 0; i < image_files.size(); i++) {
+	printf("Loading negative image: %d\n", i+1);
         cv::Mat temp_image = cv::imread(std::string(TRAINING_DIR) + "negative/georgia_tech/" + image_files[i], cv::IMREAD_GRAYSCALE);
         std::vector<cv::Rect> face_regions = detect_faces(temp_image);
         if (face_regions.size() == 1) {
