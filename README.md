@@ -4,21 +4,21 @@ Facial Recognition Door Lock Software for a Raspberry Pi 3 Model B with Raspberr
 
 Tested with: 
  - Raspberry Pi 3 Model B
-  - Raspberry Pi Camera Module v2
-   - OpenCV 3.4.0
+ - Raspberry Pi Camera Module v2
+ - OpenCV 3.4.0
 
 
-    Setup:
-      - Make sure the camera module in enabled with `sudo raspo-config`
-        - Use `sudo modprobe bcm2835-v4l2` to create a device for the Camera Module at /dev/video0
-          - Make sure OpenCV 3.4.0 or later is installed (__including OpenCV contrib__)(you may need to compile from source)
-            - In the repository, run `make all` to build the executibles
-              - To capture positive images (of allowed faces) run the `capture_postitives.out` program:
-                  - `./capture_positives.out <name>` (where name is the name of the person you are capturing)
-                      - Follow the prompts and take about 20 images of your subject
-                      - After capturing positive images for everyone allowed through the door, train the model with the `train.out` program:
-                          - `./train.out <model_name>` will create a complete model
-                          - Finally, to run the main lock program, use `./lock.out <model_name>`
+ Setup:
+  - Make sure the camera module in enabled with `sudo raspo-config`
+  - Use `sudo modprobe bcm2835-v4l2` to create a device for the Camera Module at /dev/video0
+  - Make sure OpenCV 3.4.0 or later is installed (__including OpenCV contrib__)(you may need to compile from source)
+  - In the repository, run `make all` to build the executibles
+  - To capture positive images (of allowed faces) run the `capture_postitives.out` program:
+    - `./capture_positives.out <name>` (where name is the name of the person you are capturing)
+    - Follow the prompts and take about 20 images of your subject
+- After capturing positive images for everyone allowed through the door, train the model with the `train.out` program:
+    - `./train.out <model_name>` will create a complete model
+- Finally, to run the main lock program, use `./lock.out <model_name>`
 
 
 ### Virtual Environment
